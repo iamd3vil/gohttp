@@ -19,10 +19,10 @@ func main() {
 
 	// gin.H is a shortcut for map[string]interface{}
 	r.GET("/ip", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"ip": c.Request.RemoteAddr})
+		c.JSON(http.StatusOK, gin.H{"ip": c.Request.Header["X-Forwarded-For"]})
 	})
 	r.GET("/user-agent", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"user-agent": c.Request.UserAgent})
+		c.JSON(http.StatusOK, gin.H{"user-agent": c.Request.UserAgent()})
 	})
 	r.Run(":" + port)
 }
