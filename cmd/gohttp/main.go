@@ -13,6 +13,8 @@ func main() {
 
 	port := os.Getenv("PORT")
 
+	var headers map[string]string
+
 	if port == "" {
 		log.Fatal("$PORT must be set")
 	}
@@ -25,7 +27,10 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{"user-agent": c.Request.UserAgent()})
 	})
 	r.GET("/headers", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"headers": c.Request.Header})
+		for k, v := range c.Request.Header {
+			headers[k] = v[0]
+		}
+		c.JSON(http.StatusOK, gin.H{"headers": headers})
 	})
 	r.Run(":" + port)
 }
