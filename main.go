@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"os"
 
 	"gohttp/Godeps/_workspace/src/github.com/gin-gonic/gin"
 )
@@ -9,7 +10,7 @@ import (
 func main() {
 	r := gin.Default()
 
-	gin.SetMode(gin.ReleaseMode)
+	port := os.Getenv("PORT")
 
 	// gin.H is a shortcut for map[string]interface{}
 	r.GET("/ip", func(c *gin.Context) {
@@ -18,5 +19,5 @@ func main() {
 	r.GET("/user-agent", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"user-agent": c.Request.UserAgent})
 	})
-	r.Run("0.0.0.0:80")
+	r.Run(":" + port)
 }
