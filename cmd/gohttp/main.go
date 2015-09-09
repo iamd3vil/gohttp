@@ -24,5 +24,8 @@ func main() {
 	r.GET("/user-agent", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"user-agent": c.Request.UserAgent()})
 	})
+	r.GET("/headers", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"headers": c.Request.Header})
+	})
 	r.Run(":" + port)
 }
