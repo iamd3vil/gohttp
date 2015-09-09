@@ -13,7 +13,7 @@ func main() {
 
 	port := os.Getenv("PORT")
 
-	var headers map[string]string
+	headers := make(map[string]string)
 
 	if port == "" {
 		log.Fatal("$PORT must be set")
