@@ -25,7 +25,7 @@ func main() {
 	// Here, as Heroku contains the original IP address in "X-Forwarded-For".
 	// So, RemoteAddr is not used.
 	r.GET("/ip", func(c *gin.Context) {
-		c.IndentedJSON(http.StatusOK, gin.H{"ip": c.Request.RemoteAddr})
+		c.IndentedJSON(http.StatusOK, gin.H{"ip": c.Request.Header.Get("X-Forwarded-For")})
 	})
 
 	// Returns JSON containing user agent of the request.
