@@ -62,7 +62,7 @@ func main() {
 			headers[k] = v[0]
 		}
 		c.IndentedJSON(http.StatusOK, gin.H{"args": args, "headers": headers,
-			"ip": c.Request.RemoteAddr, "url": c.Request.URL.String()})
+			"ip": c.Request.Header.Get("X-Forwarded-For"), "url": c.Request.URL.String()})
 	})
 
 	// r.GET("/redirect/:n", func(c *gin.Context) {
