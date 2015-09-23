@@ -46,6 +46,7 @@ func main() {
 		codeInt, err := strconv.Atoi(code)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Not a valid code"})
+			return
 		}
 		c.IndentedJSON(codeInt, gin.H{"status_code": codeInt})
 
@@ -53,7 +54,6 @@ func main() {
 
 	r.GET("/get", func(c *gin.Context) {
 		queries := c.Request.URL.Query()
-		fmt.Println(queries)
 		args := make(map[string]string)
 		for k, v := range queries {
 			args[k] = v[0]
@@ -65,20 +65,21 @@ func main() {
 			"ip": c.Request.Header.Get("X-Forwarded-For"), "url": c.Request.URL.String()})
 	})
 
-	// r.GET("/redirect/:n", func(c *gin.Context) {
-	// 	redirectsStr := c.Param("n")
-	// 	redirects, err := strconv.Atoi(redirectsStr)
-	// 	if err != nil {
-	// 		fmt.Println(err)
-	// 		c.JSON(http.StatusBadRequest, gin.H{"error": "Not a valid code"})
-	// 	}
-	// 	fmt.Println(redirects - 1)
-	// 	if redirects == 1 {
-	// 		c.Redirect(302, "/get")
-	// 	} else {
-	// 		c.Redirect(302, "/redirect/"+string(redirects-1))
-	// 	}
-	// })
+	r.GET("/redirect/:n", func(c *gin.Context) {
+		redirectsStr := c.Param("n")
+		redirects, err := strconv.Atoi(redirectsStr)
+		if err != nil {
+			fmt.Println(err)
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Not a valid code"})
+			return
+		}
+		if redirects == 1 {
+			c.Redirect(302, "/get")
+			return
+		}
+		nextRedirect := strconv.Itoa(redirects - 1)
+		c.Redirect(302, "/redirect/"+nextRedirect)
+	})
 
 	r.POST("/post", func(c *gin.Context) {
 		err := c.Request.ParseForm()
