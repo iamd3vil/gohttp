@@ -11,7 +11,7 @@ import (
 	"os"
 	"sync"
 
-	"gohttp/Godeps/_workspace/src/github.com/gin-gonic/gin/render"
+	"github.com/gin-gonic/gin/render"
 )
 
 // Framework's version

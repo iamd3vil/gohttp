@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"sync"
 
-	"gohttp/Godeps/_workspace/src/gopkg.in/bluesuncorp/validator.v5"
+	"gopkg.in/bluesuncorp/validator.v5"
 )
 
 type defaultValidator struct {

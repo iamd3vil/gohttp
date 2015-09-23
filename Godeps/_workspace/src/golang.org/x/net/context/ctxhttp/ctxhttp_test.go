@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	"gohttp/Godeps/_workspace/src/golang.org/x/net/context"
+	"golang.org/x/net/context"
 )
 
 const (
