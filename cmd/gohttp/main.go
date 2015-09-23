@@ -101,6 +101,11 @@ func main() {
 			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "Please enter a number."})
 			return
 		}
+
+		for k, v := range c.Request.Header {
+			headers[k] = v[0]
+		}
+
 		time.Sleep(time.Second * time.Duration(delayInt))
 		c.IndentedJSON(http.StatusOK, gin.H{"args": "", "headers": headers,
 			"ip": c.Request.Header.Get("X-Forwarded-For"), "url": c.Request.URL.String()})
