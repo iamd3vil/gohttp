@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"time"
 
 	"gohttp/Godeps/_workspace/src/github.com/gin-gonic/gin"
 )
@@ -84,7 +85,6 @@ func main() {
 	r.POST("/post", func(c *gin.Context) {
 		err := c.Request.ParseForm()
 		if err != nil {
-			fmt.Println(err)
 			c.JSON(http.StatusBadRequest, gin.H{"error": err})
 		}
 		values := make(map[string]string)
@@ -92,6 +92,18 @@ func main() {
 			values[k] = v[0]
 		}
 		c.IndentedJSON(http.StatusCreated, gin.H{"values": values})
+	})
+
+	r.GET("/delay/:n", func(c *gin.Context) {
+		delay := c.Param("n")
+		delayInt, err := strconv.Atoi(delay)
+		if err != nil {
+			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "Please enter a number."})
+			return
+		}
+		time.Sleep(time.Second * time.Duration(delayInt))
+		c.IndentedJSON(http.StatusOK, gin.H{"args": "", "headers": headers,
+			"ip": c.Request.Header.Get("X-Forwarded-For"), "url": c.Request.URL.String()})
 	})
 
 	r.Run(":" + port)
