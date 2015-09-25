@@ -6,9 +6,10 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 
-	"github.com/gin-gonic/gin"
+	"gohttp/Godeps/_workspace/src/github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -109,6 +110,27 @@ func main() {
 		time.Sleep(time.Second * time.Duration(delayInt))
 		c.IndentedJSON(http.StatusOK, gin.H{"args": "", "headers": headers,
 			"ip": c.Request.Header.Get("X-Forwarded-For"), "url": c.Request.URL.String()})
+	})
+
+	r.GET("/redirect-to", func(c *gin.Context) {
+		queries := c.Request.URL.Query()
+		args := make(map[string]string)
+		for k, v := range queries {
+			args[k] = v[0]
+		}
+		url := args["url"]
+
+		if url == "" {
+			fmt.Println("hello")
+			c.Redirect(302, "/get")
+			return
+		}
+
+		if !strings.HasPrefix(url, "http://") {
+			url = "http://" + url
+		}
+
+		c.Redirect(302, url)
 	})
 
 	r.Run(":" + port)
